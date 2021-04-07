@@ -1,0 +1,32 @@
+title Uuden muistiinpanon luonti
+
+note over selain:
+Käyttäjä kirjoittaa tekstikenttään
+tekstin, ja napsauttaa tallenna-nappia.
+end note
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note
+note over palvelin:
+Palvelin luo uutta muistiinpanoa vastaavan olion tiedoilla,
+jotka saatiin POST-pyynnön mukana. Olio sijoitetaan 
+muistiinpanot sisältävään "notes"-taulukkoon.
+end note
+palvelin->selain: Uudelleenohjauspyyntö (302). Palvelin kehottaa selainta tekemään GET-pyynnön osoitteeseen /notes
+selain-->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/notes
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.css
+palvelin-->selain: main.css
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/main.js
+palvelin-->selain: main.js
+
+note over selain:
+Selain alkaa suorittamaan js-koodia
+joka pyytää JSON-datan palvelimelta.
+end note
+
+selain->palvelin: HTTP GET https://studies.cs.helsinki.fi/exampleapp/data.json
+palvelin-->selain: data.json
+
+note over selain:
+Selain suorittaa tapahtumankäsittelijän
+joka renderöi jälleen kaikki muistiinpanot sivulle.
+end note

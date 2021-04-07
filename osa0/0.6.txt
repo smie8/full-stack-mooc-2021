@@ -1,0 +1,21 @@
+title Käyttäjä luo uuden muistiinpanon single page -versiossa.
+
+note over selain
+JavaScript-koodi käy hakemassa sivulta 
+lomake-elementin ja tapahtumankäsittelijän
+avulla lomake lähetetään. JavaScript luo 
+muistiinpanon, lisää sen muistiinpanoihin
+ja piirtää muistiinpanojen listan uudelleen.
+end note
+
+selain->palvelin: HTTP POST https://studies.cs.helsinki.fi/exampleapp/new_note_spa
+
+note over palvelin:
+Palvelimelle saapuu pyynnön mukana uusi muistiinpano JSON-muodossa.
+end note
+
+palvelin->selain: HTTP-statuskoodi 201 (created)
+
+note over selain:
+Uudelleenohjausta ei tapahdu.
+end note
