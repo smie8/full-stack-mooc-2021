@@ -1,5 +1,5 @@
 import React from 'react'
-import './notificationbox.css'
+import './notification-box.css'
 
 const NotificationBox = ({ notification, notificationStyle }) => {
 
