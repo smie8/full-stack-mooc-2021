@@ -3,20 +3,9 @@ const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
-const initialBlogs = [
-    {
-        title: 'Test blog',
-        author: 'Tester',
-        url: 'www.testblogurl.com',
-        likes: 0
-    },
-    {
-        title: 'Test blog 2',
-        author: "Another tester",
-        url: 'www.testblogurl2.com',
-        likes: 2
-    }
-]
+const helper = require('./test_helper')
+
+const initialBlogs = helper.initialBlogs
 
 beforeEach(async () => {
     await Blog.deleteMany({})
