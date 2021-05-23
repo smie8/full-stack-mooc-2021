@@ -1,11 +1,29 @@
+const { request } = require('express')
 const mongoose = require('mongoose')
 const supertest = require('supertest')
 const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
+const User = require('../models/user')
 const helper = require('./test_helper')
 
 const initialBlogs = helper.initialBlogs
+const testUsername = "root"
+const testPassword = "salaisuus"
+let token = 'secret'
+
+beforeAll(async (done) => {
+    await api
+        .post('/api/login')
+        .send({
+            username: testUsername,
+            password: testPassword
+        })
+        .end((err, response) => {
+            token = response.body.token
+            done()
+        })
+})
 
 beforeEach(async () => {
     await Blog.deleteMany({})
@@ -47,6 +65,7 @@ describe('addition of a new blog', () => {
     
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(newBlog)
             .expect(200)
             .expect('Content-Type', /application\/json/)
@@ -70,6 +89,7 @@ describe('addition of a new blog', () => {
     
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(newBlog)
             .expect(200)
             .expect('Content-Type', /application\/json/)
@@ -89,8 +109,23 @@ describe('addition of a new blog', () => {
     
         await api
             .post('/api/blogs')
+            .set('Authorization', `Bearer ${token}`)
             .send(newBlog)
             .expect(400)
+    })
+
+    test('new blog with no token can not be created', async () => {
+        const newBlog = {
+            title: "New blog",
+            author: "Tester",
+            likes: 0,
+            url: "url.com"
+        }
+
+        await api
+            .post('/api/blogs')
+            .send(newBlog)
+            .expect(401)
     })
 })
 
@@ -101,6 +136,7 @@ describe('deletion of a blog', () => {
         
         await api
             .delete(`/api/blogs/${blogToDelete.id}`)
+            .set('Authorization', `Bearer ${token}`)
             .expect(204)
     
         const blogsAtEnd = await api.get('/api/blogs')

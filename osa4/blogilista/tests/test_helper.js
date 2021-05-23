@@ -5,23 +5,21 @@ const initialBlogs = [
         title: 'Test blog',
         author: 'Tester',
         url: 'www.testblogurl.com',
-        likes: 0
+        likes: 0,
+        user: [{
+            _id: "60a93243894f393ee0e85110"
+        }]
     },
     {
         title: 'Test blog 2',
         author: "Another tester",
         url: 'www.testblogurl2.com',
-        likes: 2
+        likes: 2,
+        user: [{
+            _id: "60a93243894f393ee0e85110"
+        }]
     }
 ]
-
-// const nonExistingId = async () => {
-//   const note = new Note({ content: 'willremovethissoon', date: new Date() })
-//   await note.save()
-//   await note.remove()
-
-//   return note._id.toString()
-// }
 
 const usersInDb = async () => {
   const users = await User.find({})

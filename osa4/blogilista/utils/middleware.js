@@ -41,10 +41,20 @@ const userExtractor = async (request, response, next) => {
   try {
     const authorization = request.get('authorization')
     let token = null;
+
     if (authorization && authorization.toLowerCase().startsWith('bearer ')) {
       token = authorization.substring(7)
     }
+
+    if (!token) {
+      response.status(401).send({ error: 'unauthorized' }) 
+    }
+
     const decodedToken = jwt.verify(token, process.env.SECRET)
+
+    if (!decodedToken.id) {
+      response.status(401).send({ error: 'unauthorized' })
+    }
 
     request.user = await User.findById(decodedToken.id)
   } catch(exception) {
