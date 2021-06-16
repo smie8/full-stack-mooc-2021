@@ -73,8 +73,10 @@ blogsRouter.put('/:id', middleware.userExtractor, async (request, response, next
       id: request.body.id
     }
     await Blog.findByIdAndUpdate(request.params.id, { likes: request.body.likes })
-    response.json(updatedBlog)
-    response.status(204).end()
+    response
+      .status(204)
+      .json(updatedBlog)
+      .end()
   } catch(exception) {
     next(exception)
   }
