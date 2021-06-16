@@ -154,7 +154,7 @@ describe('editing a blog', () => {
         await api
             .put(`/api/blogs/${blogToUpdate.id}`)
             .send({ likes: 10 })
-            .expect(303)
+            .expect(204)
 
         const blogsAtEnd = await api.get('/api/blogs')
         const updatedBlog = blogsAtEnd.body.find(blog => blog.id === blogToUpdate.id)
