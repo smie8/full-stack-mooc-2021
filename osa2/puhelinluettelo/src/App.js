@@ -44,6 +44,11 @@ const App = () => {
             setNotificationStyle('success')
             activateNotification(`Added ${personObj.name} to phonebook`)
           })
+          .catch(error => {
+            console.log(error.response.data)
+            setNotificationStyle('error')
+            activateNotification(error.response.data.error)
+          })
     } else {
       window.confirm(`${newName} is already added to phonebook. Replace the old number with a new one?`)
       const person = persons.find(person => person.name === newName)

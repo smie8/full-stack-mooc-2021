@@ -4,7 +4,7 @@ const AddNewPersonForm = ({ addPerson, newName, newNumber, handleNameChange, han
     
     return (
         <div>
-            <h3>add a new</h3>
+            <h3>Add new</h3>
             <form onSubmit={addPerson}>
             <div>
                 name: <input value={newName} onChange={handleNameChange} />
