@@ -48,13 +48,6 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response, next) 
 
 blogsRouter.delete('/:id', middleware.userExtractor, async (request, response, next) => {
   try {
-    // const blog = await Blog.findById(request.params.id)
-    // const user = request.user
-
-    // // if (blog.user.toString() !== user.id.toString()) {
-    // //   return response.status(401).json({ error: 'Token invalid or user trying to delete somebody elses blog' })
-    // // }
-
     await Blog.findByIdAndRemove(request.params.id)
     response.status(204).end()
   } catch(exception) {
@@ -74,8 +67,8 @@ blogsRouter.put('/:id', middleware.userExtractor, async (request, response, next
     }
     await Blog.findByIdAndUpdate(request.params.id, { likes: request.body.likes })
     response
-      .status(204)
       .json(updatedBlog)
+      .status(204)
       .end()
   } catch(exception) {
     next(exception)
