@@ -1,4 +1,5 @@
 import axios from 'axios'
+
 const baseUrl = '/api/login'
 
 const login = async credentials => {
@@ -6,5 +7,4 @@ const login = async credentials => {
     return response.data
 }
 
-/* eslint import/no-anonymous-default-export: [2, {"allowObject": true}] */
 export default { login }

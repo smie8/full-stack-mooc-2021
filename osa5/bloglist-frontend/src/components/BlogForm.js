@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 
 // const BlogForm = ({ onSubmit, newBlogTitle, handleBlogTitleChange, newBlogAuthor, handleBlogAuthorChange, newBlogUrl, handleBlogUrlChange }) => {
 const BlogForm = ({ createBlog, user }) => {
