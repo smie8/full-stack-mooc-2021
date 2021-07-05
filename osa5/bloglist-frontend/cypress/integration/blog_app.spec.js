@@ -50,5 +50,18 @@ describe('Blog app', function() {
             cy.contains('Added "Test Blog" to blogs')            
             cy.get('.blogDiv:last-child').contains('Test Blog')
         })
+
+        it('A blog can be liked', function() {
+            cy.get('#create-new').click()
+            cy.get('#title').type('Test Blog')
+            cy.get('#author').type('Tester')
+            cy.get('#url').type('test.com')
+            cy.get('#submit-blog').click()
+
+            cy.get('.blogDiv:last-child span').click()
+            cy.get('.blogDiv:last-child').contains('likes: 0')
+            cy.get('.blogDiv:last-child button:nth-child(2)').click()
+            cy.get('.blogDiv:last-child').contains('likes: 1')
+        })
     })
 })
