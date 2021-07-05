@@ -41,27 +41,36 @@ describe('Blog app', function() {
         })
 
         it('A blog can be created', function() {
-            cy.get('#create-new').click()
-            cy.get('#title').type('Test Blog')
-            cy.get('#author').type('Tester')
-            cy.get('#url').type('test.com')
-            cy.get('#submit-blog').click()
+            createNewBlog()
 
             cy.contains('Added "Test Blog" to blogs')            
             cy.get('.blogDiv:last-child').contains('Test Blog')
         })
 
         it('A blog can be liked', function() {
-            cy.get('#create-new').click()
-            cy.get('#title').type('Test Blog')
-            cy.get('#author').type('Tester')
-            cy.get('#url').type('test.com')
-            cy.get('#submit-blog').click()
+            createNewBlog()
 
             cy.get('.blogDiv:last-child span').click()
             cy.get('.blogDiv:last-child').contains('likes: 0')
             cy.get('.blogDiv:last-child button:nth-child(2)').click()
             cy.get('.blogDiv:last-child').contains('likes: 1')
         })
+
+        it('A blog can be deleted', function() {
+            createNewBlog()
+
+            cy.get('.blogDiv:last-child span').click()
+            cy.get('.blogDiv:last-child button:last-child').click()
+
+            cy.contains('Deleted blog: "Test Blog"')
+        })        
     })
 })
+
+function createNewBlog() {
+    cy.get('#create-new').click()
+    cy.get('#title').type('Test Blog')
+    cy.get('#author').type('Tester')
+    cy.get('#url').type('test.com')
+    cy.get('#submit-blog').click()
+}
