@@ -32,4 +32,23 @@ describe('Blog app', function() {
             cy.contains('wrong username or password')
         })
     })
+
+    describe('When logged in', function() {
+        beforeEach(function() {
+            cy.get('#username').type('testuser')
+            cy.get('#password').type('salainen')
+            cy.get('#login-button').click()
+        })
+
+        it('A blog can be created', function() {
+            cy.get('#create-new').click()
+            cy.get('#title').type('Test Blog')
+            cy.get('#author').type('Tester')
+            cy.get('#url').type('test.com')
+            cy.get('#submit-blog').click()
+
+            cy.contains('Added "Test Blog" to blogs')            
+            cy.get('.blogDiv:last-child').contains('Test Blog')
+        })
+    })
 })
