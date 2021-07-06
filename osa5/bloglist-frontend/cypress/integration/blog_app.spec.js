@@ -1,3 +1,5 @@
+const { wait } = require("@testing-library/dom")
+
 describe('Blog app', function() {
     beforeEach(function() {
         cy.request('POST', 'http://localhost:3003/api/testing/reset')
@@ -41,14 +43,14 @@ describe('Blog app', function() {
         })
 
         it('A blog can be created', function() {
-            createNewBlog()
+            createNewBlog('Test Blog')
 
             cy.contains('Added "Test Blog" to blogs')            
             cy.get('.blogDiv:last-child').contains('Test Blog')
         })
 
         it('A blog can be liked', function() {
-            createNewBlog()
+            createNewBlog('Test Blog')
 
             cy.get('.blogDiv:last-child span').click()
             cy.get('.blogDiv:last-child').contains('likes: 0')
@@ -57,19 +59,36 @@ describe('Blog app', function() {
         })
 
         it('A blog can be deleted', function() {
-            createNewBlog()
+            createNewBlog('Test Blog')
 
             cy.get('.blogDiv:last-child span').click()
             cy.get('.blogDiv:last-child button:last-child').click()
 
             cy.contains('Deleted blog: "Test Blog"')
-        })        
+        })
+        
+        it('Blog list is arranged by the number of blog likes (liking last blog should move it to be the first)', function() {
+            createNewBlog("Test Blog 1")
+            createNewBlog("Test Blog 2")
+
+            cy.get('.blogDiv').should('not.contain', 'Test Blog 2')
+
+            cy.wait(2500)
+
+            cy.get('.blogDiv span', { timeout: 10000 }).then( blogs => {
+                console.log('number of blogDivs', blogs.length)
+                cy.wrap(blogs[1]).click()
+                cy.get('.blogDiv:last-child button:nth-child(2)').click()
+            })
+
+            cy.get('.blogDiv').should('contain', 'Test Blog 2')
+        })
     })
 })
 
-function createNewBlog() {
-    cy.get('#create-new').click()
-    cy.get('#title').type('Test Blog')
+function createNewBlog(title) {
+    cy.get('#create-new', { timeout: 5000 }).click()
+    cy.get('#title').type(title)
     cy.get('#author').type('Tester')
     cy.get('#url').type('test.com')
     cy.get('#submit-blog').click()
