@@ -15,12 +15,6 @@ const App = () => {
       .then(response => {
         console.log('promise fulfilled')
         setCountries(response.data)
-    // axios
-    //   .get('http://api.weatherstack.com/forecast?access_key=' + api_key + '&query=Helsinki')
-    //   .then(response => {
-    //     console.log('promise 2 fulfilled')
-    //     console.log(response.data)
-    //   })
     })
   }, [])
 
