@@ -7,13 +7,10 @@ const Filter = () => {
 
     const handleChange = (event) => {
         const filterValue = event.target.value
-        console.log(filterValue)
         dispatch(setFilter(filterValue))
     }
 
-    const style = {
-        marginBottom: 10
-    }
+    const style = { marginBottom: 10 }
 
     return (
         <div style={style}>
