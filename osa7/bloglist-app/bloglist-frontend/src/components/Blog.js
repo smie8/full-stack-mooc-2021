@@ -1,47 +1,64 @@
 import React, { useState } from 'react'
-import PropTypes from 'prop-types'
 
-const Blog = ({ blog, handleLike, handleRemove, own }) => {
-  const [visible, setVisible] = useState(false)
+const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
+    const [detailsVisible, setDetailsVisible] = useState(false)
+    const showWhenVisible = { display: detailsVisible ? '' : 'none' }
 
-  const blogStyle = {
-    paddingTop: 10,
-    paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
-    marginBottom: 5
-  }
+    const toggleDetailsVisibility = () => {
+        setDetailsVisible(!detailsVisible)
+    }
 
-  const label = visible ? 'hide' : 'view'
+    const handleBlogLike = () => {
+        likeBlog({
+            title: blog.title,
+            author: blog.author,
+            likes: blog.likes + 1,
+            url: blog.url,
+            user: blog.user,
+            id: blog.id
+        },
+        blog.id)
+    }
 
-  return (
-    <div style={blogStyle} className='blog'>
-      <div>
-        <i>{blog.title}</i> by {blog.author} <button onClick={() => setVisible(!visible)}>{label}</button>
-      </div>
-      {visible&&(
-        <div>
-          <div>{blog.url}</div>
-          <div>likes {blog.likes}
-            <button onClick={() => handleLike(blog.id)}>like</button>
-          </div>
-          <div>added by {blog.user[0].name}</div>
-          {own&&<button onClick={() => handleRemove(blog.id)}>remove</button>}
+    const handleBlogDelete = () => {
+        deleteBlog(blog.title, blog.id)
+    }
+
+    const blogStyle = {
+        padding: '1em 0em 1em 0.5em',
+        border: '1px solid',
+        margin: '1em 0 1em 0',
+    }
+
+    const blogStyleDetails = {
+        fontSize: '0.9em',
+        padding: '0.5em 0 0 0',
+    }
+
+    const blogStyleTitle = {
+        fontWeight: '800',
+        cursor: 'pointer',
+    }
+
+    const likeButtonStyle = {
+        marginLeft: '0.5em',
+    }
+
+    return (
+        <div style={blogStyle} className='blogDiv'>
+            <span onClick={toggleDetailsVisibility} style={blogStyleTitle}>{blog.title} {blog.author}</span>
+            <div style={showWhenVisible} className='blogDetails'>
+                <div style={blogStyleDetails}>
+                    url: {blog.url}<br/>
+                    likes: {blog.likes}<button style={likeButtonStyle} onClick={handleBlogLike}>like</button><br/>
+                    added by: {blog.user && blog.user[0].name}
+                </div>
+                <div>
+                    {blog.user[0].username === user.username && <button onClick={handleBlogDelete}>remove</button>}
+                </div>
+            </div>
         </div>
-      )}
-    </div>
-  )
-}
-
-Blog.propTypes = {
-  blog: PropTypes.shape({
-    title: PropTypes.string.isRequired,
-    author: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-  }).isRequired,
-  handleLike: PropTypes.func.isRequired,
-  handleRemove: PropTypes.func.isRequired,
-  own: PropTypes.bool.isRequired
+    )
 }
 
 export default Blog
