@@ -8,7 +8,7 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification, setNotificationStyle } from './reducers/notificationReducer'
-import { initializeBlogs, createBlog } from './reducers/blogReducer'
+import { initializeBlogs, createBlog, likeBlog, deleteBlog } from './reducers/blogReducer'
 
 const App = () => {
     const [username, setUsername] = useState('')
@@ -57,7 +57,7 @@ const App = () => {
         setUser(null)
     }
 
-    const addBlog = (blogObject) => {
+    const handleCreateBlog = (blogObject) => {
         blogFormRef.current.toggleVisibility()
 
         try {
@@ -72,42 +72,29 @@ const App = () => {
         }
     }
 
-    const likeBlog = async (blogObject, id) => {
-        blogService
-            .updateBlog(id, blogObject)
-            .then((returnedBlog) => {
-                // setBlogs(blogs
-                //     .map((blog) => (blog.id === id ? returnedBlog : blog))
-                //     .sort((a, b) => { return b.likes - a.likes })
-                // )
-                console.log(returnedBlog)
-                dispatch(setNotificationStyle('success'))
-                dispatch(setNotification(`Liked "${blogObject.title}"`))
-            })
-            .catch(error => {
-                console.log(error)
-                dispatch(setNotificationStyle('error'))
-                dispatch(setNotification(error.message))
-            })
+    const handleLikeBlog = async (blog, id) => {
+        try {
+            dispatch(likeBlog(id, blog))
+            dispatch(setNotificationStyle('success'))
+            dispatch(setNotification(`Liked "${blog.title}"`))
+        } catch(exception) {
+            console.log(exception)
+            dispatch(setNotificationStyle('error'))
+            dispatch(setNotification(exception.message))
+        }
     }
 
-    const deleteBlog = async (blogTitle, id) => {
+    const handleDeleteBlog = async (blogTitle, id) => {
         if (window.confirm(`Remove blog "${blogTitle}"?`)) {
-            blogService
-                .deleteBlog(id)
-                .then(() => {
-                    // setBlogs(blogs
-                    //     .filter((blog) => blog.id !== id)
-                    //     .sort((a, b) => { return b.likes - a.likes })
-                    // )
-                    dispatch(setNotificationStyle('delete'))
-                    dispatch(setNotification(`Deleted blog: "${blogTitle}"`))
-                })
-                .catch(error => {
-                    console.log(error)
-                    dispatch(setNotificationStyle('error'))
-                    dispatch(setNotification(error.message))
-                })
+            try {
+                dispatch(deleteBlog(id))
+                dispatch(setNotificationStyle('delete'))
+                dispatch(setNotification(`Deleted blog: "${blogTitle}"`))
+            } catch(exception) {
+                console.log(exception)
+                dispatch(setNotificationStyle('error'))
+                dispatch(setNotification(exception.message))
+            }
         }
     }
 
@@ -135,12 +122,12 @@ const App = () => {
             <br/><br/>
 
             <Togglable buttonLabel="create new" idProp="create-new" ref={blogFormRef}>
-                <BlogForm createBlog={addBlog} user={user} />
+                <BlogForm createBlog={handleCreateBlog} user={user} />
             </Togglable>
 
             <br/><br/>
             {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} likeBlog={likeBlog} deleteBlog={deleteBlog} user={user} />
+                <Blog key={blog.id} blog={blog} likeBlog={handleLikeBlog} deleteBlog={handleDeleteBlog} user={user} />
             )}
         </div>
     )
