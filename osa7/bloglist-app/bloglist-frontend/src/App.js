@@ -8,21 +8,19 @@ import Togglable from './components/Togglable'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification, setNotificationStyle } from './reducers/notificationReducer'
+import { initializeBlogs, createBlog } from './reducers/blogReducer'
 
 const App = () => {
-    const [blogs, setBlogs] = useState([])
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
     const blogFormRef = React.useRef()
     const dispatch = useDispatch()
-    const notification = useSelector(state => state)
+    const blogs = useSelector(state => state.blogs)
 
     useEffect(() => {
-        blogService.getAllBlogs().then(blogs =>
-            setBlogs( blogs.sort((a, b) => { return b.likes - a.likes }) )
-        )
-    }, [])
+        dispatch(initializeBlogs())
+    }, [dispatch])
 
     useEffect(() => {
         const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
@@ -61,32 +59,28 @@ const App = () => {
 
     const addBlog = (blogObject) => {
         blogFormRef.current.toggleVisibility()
-        blogService
-            .createBlog(blogObject)
-            .then(returnedBlog => {
-                returnedBlog.user = [user]
-                setBlogs(blogs
-                    .concat(returnedBlog)
-                    .sort((a, b) => { return b.likes - a.likes })
-                )
-                dispatch(setNotificationStyle('success'))
-                dispatch(setNotification(`Added "${blogObject.title}" to blogs`))
-            })
-            .catch(error => {
-                console.log(error)
-                dispatch(setNotificationStyle('error'))
-                dispatch(setNotification(error.message))
-            })
+
+        try {
+            console.log(blogObject)
+            dispatch(createBlog(blogObject))
+            dispatch(setNotificationStyle('success'))
+            dispatch(setNotification(`Added "${blogObject.title}" to blogs`))
+        } catch (exception) {
+            console.log(exception)
+            dispatch(setNotificationStyle('error'))
+            dispatch(setNotification(exception.message))
+        }
     }
 
     const likeBlog = async (blogObject, id) => {
         blogService
             .updateBlog(id, blogObject)
             .then((returnedBlog) => {
-                setBlogs(blogs
-                    .map((blog) => (blog.id === id ? returnedBlog : blog))
-                    .sort((a, b) => { return b.likes - a.likes })
-                )
+                // setBlogs(blogs
+                //     .map((blog) => (blog.id === id ? returnedBlog : blog))
+                //     .sort((a, b) => { return b.likes - a.likes })
+                // )
+                console.log(returnedBlog)
                 dispatch(setNotificationStyle('success'))
                 dispatch(setNotification(`Liked "${blogObject.title}"`))
             })
@@ -102,10 +96,10 @@ const App = () => {
             blogService
                 .deleteBlog(id)
                 .then(() => {
-                    setBlogs(blogs
-                        .filter((blog) => blog.id !== id)
-                        .sort((a, b) => { return b.likes - a.likes })
-                    )
+                    // setBlogs(blogs
+                    //     .filter((blog) => blog.id !== id)
+                    //     .sort((a, b) => { return b.likes - a.likes })
+                    // )
                     dispatch(setNotificationStyle('delete'))
                     dispatch(setNotification(`Deleted blog: "${blogTitle}"`))
                 })
@@ -136,7 +130,6 @@ const App = () => {
         <div>
             <h2>blogs</h2>
             <Notification />
-            {notification.message}
             <div>{user.name} logged in</div>
             <button onClick={handleLogout}>logout</button>
             <br/><br/>
