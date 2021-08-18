@@ -23,15 +23,6 @@ const App = () => {
         dispatch(initializeBlogs())
     }, [dispatch])
 
-    // useEffect(() => {
-    //     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-    //     if (loggedUserJSON) {
-    //         const parsedLoggedUser = JSON.parse(loggedUserJSON)
-    //         dispatch(setUser(parsedLoggedUser))
-    //         blogService.setToken(parsedLoggedUser.token)
-    //     }
-    // }, [])
-
     const handleLogin = async (event) => {
         event.preventDefault()
 
