@@ -9,41 +9,42 @@ import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification, setNotificationStyle } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog, likeBlog, deleteBlog } from './reducers/blogReducer'
+import { setUser } from './reducers/userReducer'
 
 const App = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const [user, setUser] = useState(null)
     const blogFormRef = React.useRef()
     const dispatch = useDispatch()
     const blogs = useSelector(state => state.blogs)
+    const user = useSelector(state => state.user)
 
     useEffect(() => {
         dispatch(initializeBlogs())
     }, [dispatch])
 
-    useEffect(() => {
-        const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
-        if (loggedUserJSON) {
-            const user = JSON.parse(loggedUserJSON)
-            setUser(user)
-            blogService.setToken(user.token)
-        }
-    }, [])
+    // useEffect(() => {
+    //     const loggedUserJSON = window.localStorage.getItem('loggedBlogappUser')
+    //     if (loggedUserJSON) {
+    //         const parsedLoggedUser = JSON.parse(loggedUserJSON)
+    //         dispatch(setUser(parsedLoggedUser))
+    //         blogService.setToken(parsedLoggedUser.token)
+    //     }
+    // }, [])
 
     const handleLogin = async (event) => {
         event.preventDefault()
 
         try {
-            const user = await loginService.login({
+            const loginUser = await loginService.login({
                 username, password,
             })
 
             window.localStorage.setItem(
-                'loggedBlogappUser', JSON.stringify(user)
+                'loggedBlogappUser', JSON.stringify(loginUser)
             )
-            blogService.setToken(user.token)
-            setUser(user)
+            blogService.setToken(loginUser.token)
+            dispatch(setUser(loginUser))
             setUsername('')
             setPassword('')
         } catch (exception) {
@@ -54,14 +55,13 @@ const App = () => {
 
     const handleLogout = () => {
         window.localStorage.removeItem('loggedBlogappUser')
-        setUser(null)
+        dispatch(setUser(null))
     }
 
     const handleCreateBlog = (blogObject) => {
         blogFormRef.current.toggleVisibility()
 
         try {
-            console.log(blogObject)
             dispatch(createBlog(blogObject))
             dispatch(setNotificationStyle('success'))
             dispatch(setNotification(`Added "${blogObject.title}" to blogs`))
