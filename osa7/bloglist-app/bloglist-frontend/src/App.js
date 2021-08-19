@@ -5,11 +5,13 @@ import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import Users from './components/Users'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification, setNotificationStyle } from './reducers/notificationReducer'
 import { initializeBlogs, createBlog, likeBlog, deleteBlog } from './reducers/blogReducer'
 import { setUser } from './reducers/userReducer'
+import { initializeUsers } from './reducers/usersReducer'
 
 const App = () => {
     const [username, setUsername] = useState('')
@@ -18,9 +20,12 @@ const App = () => {
     const dispatch = useDispatch()
     const blogs = useSelector(state => state.blogs)
     const user = useSelector(state => state.user)
+    const users = useSelector(state => state.users)
 
     useEffect(() => {
         dispatch(initializeBlogs())
+        dispatch(initializeUsers())
+        console.log('users', users)
     }, [dispatch])
 
     const handleLogin = async (event) => {
@@ -106,7 +111,7 @@ const App = () => {
 
     return (
         <div>
-            <h2>blogs</h2>
+            <h2>Blogs</h2>
             <Notification />
             <div>{user.name} logged in</div>
             <button onClick={handleLogout}>logout</button>
@@ -115,6 +120,8 @@ const App = () => {
             <Togglable buttonLabel="create new" idProp="create-new" ref={blogFormRef}>
                 <BlogForm createBlog={handleCreateBlog} user={user} />
             </Togglable>
+
+            <Users users={users}/>
 
             <br/><br/>
             {blogs.map(blog =>

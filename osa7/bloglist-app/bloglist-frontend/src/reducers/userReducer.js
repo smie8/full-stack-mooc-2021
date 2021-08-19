@@ -3,16 +3,6 @@ const userReducer = (state = { username: '', password: '' }, action) => {
     case 'SET_USER': {
         return action.data.user
     }
-    // case 'SET_USERNAME': {
-    //     const newState = state
-    //     newState.username = action.data.username
-    //     return newState
-    // }
-    // case 'SET_PASSWORD': {
-    //     const newState = state
-    //     newState.password = action.data.password
-    //     return newState
-    // }
     default:
         return state
     }
@@ -26,17 +16,3 @@ export const setUser = (user) => {
         data: { user }
     }
 }
-
-// export const setUsername = (username) => {
-//     return {
-//         type: 'SET_USER',
-//         data: { username }
-//     }
-// }
-
-// export const setPassword = (password) => {
-//     return {
-//         type: 'SET_PASSWORD',
-//         data: { password }
-//     }
-// }
