@@ -6,6 +6,7 @@ import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
 import Users from './components/Users'
+import User from './components/User'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification, setNotificationStyle } from './reducers/notificationReducer'
@@ -121,7 +122,8 @@ const App = () => {
                 <BlogForm createBlog={handleCreateBlog} user={user} />
             </Togglable>
 
-            <Users users={users}/>
+            <Users users={users} />
+            <User user={user} blogs={blogs} />
 
             <br/><br/>
             {blogs.map(blog =>
