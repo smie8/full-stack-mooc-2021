@@ -4,6 +4,7 @@ import {
     BrowserRouter as Router,
     Switch, Route, Link
 } from 'react-router-dom'
+import Blog from './components/Blog'
 import Blogs from './components/Blogs'
 import LoginForm from './components/LoginForm'
 import Notification from './components/Notification'
@@ -93,7 +94,9 @@ const App = () => {
                 <Route path="/user/:userid">
                     <User blogs={blogs} users={users} />
                 </Route>
-                {/* TODO: add route for blog (7.15)*/}
+                <Route path="/blog/:blogid">
+                    <Blog user={user} />
+                </Route>
                 <Route path="/">
                     <Notification />
                     <Blogs blogs={blogs} user={user} />
