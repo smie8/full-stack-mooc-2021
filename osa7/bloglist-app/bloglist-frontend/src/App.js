@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import {
     BrowserRouter as Router,
     Switch, Route, Link
-  } from 'react-router-dom'
+} from 'react-router-dom'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -122,7 +122,6 @@ const App = () => {
                 <div>
                     <Link style={padding} to="/">blogs</Link>
                     <Link style={padding} to="/users">users</Link>
-                    <Link style={padding} to="/user">user</Link>
                     <span style={padding}>{user.name} logged in</span>
                     <button onClick={handleLogout}>logout</button>
                 </div>
@@ -134,9 +133,11 @@ const App = () => {
                 <Route path="/users">
                     <Users users={users} />
                 </Route>
-                <Route path="/user">
-                    <User user={user} blogs={blogs} />
+                <Route path="/user/:userid">
+                    {/* TODO: pass clicked user as parameter */}
+                    <User blogs={blogs} users={users} />
                 </Route>
+                {/* TODO: add route for blog (7.15)*/}
                 <Route path="/">
                     {/* TODO: Move this (blogs) to own component */}
                     <Togglable buttonLabel="add blog" idProp="create-new" ref={blogFormRef}>

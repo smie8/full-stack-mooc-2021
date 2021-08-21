@@ -1,7 +1,7 @@
 import React from 'react'
+import { Link } from 'react-router-dom'
 
 const Users = ({ users }) => {
-
     if (!users) {
         return null
     }
@@ -9,9 +9,11 @@ const Users = ({ users }) => {
     return (
         <div>
             <h2>Users</h2>
-            {users.map(user =>
-                <div key={user.username}>{user.name}, {user.blogs.length} blogs</div>
-            )}
+            <ul>
+                {users.map(u =>
+                    <li key={u.username}><Link to={`/user/${u.id}`}>{u.name}, {u.blogs.length} blogs</Link></li>
+                )}
+            </ul>
         </div>
     )
 }

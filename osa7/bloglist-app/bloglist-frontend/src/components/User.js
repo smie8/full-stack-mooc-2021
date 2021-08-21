@@ -1,21 +1,25 @@
 import React from 'react'
+import { useParams } from 'react-router-dom'
 
-const User = ({ user, blogs }) => {
+const User = ({ blogs, users }) => {
+    const userId = useParams().userid
 
-    if (!user) {
+    if (!userId) {
         return null
     }
 
-    const ownBlogs = blogs.filter(blog => blog.user.id === user.id)
+    const ownBlogs = blogs.filter(blog => blog.user[0].id === userId)
+    const user = users.find(user => user.id === userId)
 
     return (
         <div>
             <h2>{user.name}</h2>
-            added blogs
-            <br/>
-            {ownBlogs && ownBlogs.map(blog =>
-                <div key={blog.id}>{blog.title} by {blog.author} ({blog.url}), likes {blog.likes}</div>
-            )}
+            <h3>added blogs</h3>
+            <ul>
+                {ownBlogs && ownBlogs.map(blog =>
+                    <li key={blog.id}>{blog.title} by {blog.author} ({blog.url}), likes {blog.likes}</li>
+                )}
+            </ul>
         </div>
     )
 }
