@@ -4,24 +4,21 @@ import {
     BrowserRouter as Router,
     Switch, Route, Link
 } from 'react-router-dom'
-import Blog from './components/Blog'
+import Blogs from './components/Blogs'
 import LoginForm from './components/LoginForm'
-import BlogForm from './components/BlogForm'
 import Notification from './components/Notification'
-import Togglable from './components/Togglable'
 import Users from './components/Users'
 import User from './components/User'
 import blogService from './services/blogs'
 import loginService from './services/login'
 import { setNotification, setNotificationStyle } from './reducers/notificationReducer'
-import { initializeBlogs, createBlog, likeBlog, deleteBlog } from './reducers/blogReducer'
+import { initializeBlogs } from './reducers/blogReducer'
 import { setUser } from './reducers/userReducer'
 import { initializeUsers } from './reducers/usersReducer'
 
 const App = () => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
-    const blogFormRef = React.useRef()
     const dispatch = useDispatch()
     const blogs = useSelector(state => state.blogs)
     const user = useSelector(state => state.user)
@@ -60,46 +57,6 @@ const App = () => {
         dispatch(setUser(null))
     }
 
-    const handleCreateBlog = (blogObject) => {
-        blogFormRef.current.toggleVisibility()
-
-        try {
-            dispatch(createBlog(blogObject))
-            dispatch(setNotificationStyle('success'))
-            dispatch(setNotification(`Added "${blogObject.title}" to blogs`))
-        } catch (exception) {
-            console.log(exception)
-            dispatch(setNotificationStyle('error'))
-            dispatch(setNotification(exception.message))
-        }
-    }
-
-    const handleLikeBlog = async (blog, id) => {
-        try {
-            dispatch(likeBlog(id, blog))
-            dispatch(setNotificationStyle('success'))
-            dispatch(setNotification(`Liked "${blog.title}"`))
-        } catch(exception) {
-            console.log(exception)
-            dispatch(setNotificationStyle('error'))
-            dispatch(setNotification(exception.message))
-        }
-    }
-
-    const handleDeleteBlog = async (blogTitle, id) => {
-        if (window.confirm(`Remove blog "${blogTitle}"?`)) {
-            try {
-                dispatch(deleteBlog(id))
-                dispatch(setNotificationStyle('delete'))
-                dispatch(setNotification(`Deleted blog: "${blogTitle}"`))
-            } catch(exception) {
-                console.log(exception)
-                dispatch(setNotificationStyle('error'))
-                dispatch(setNotification(exception.message))
-            }
-        }
-    }
-
     if (user === null) {
         return (
             <div>
@@ -134,18 +91,12 @@ const App = () => {
                     <Users users={users} />
                 </Route>
                 <Route path="/user/:userid">
-                    {/* TODO: pass clicked user as parameter */}
                     <User blogs={blogs} users={users} />
                 </Route>
                 {/* TODO: add route for blog (7.15)*/}
                 <Route path="/">
-                    {/* TODO: Move this (blogs) to own component */}
-                    <Togglable buttonLabel="add blog" idProp="create-new" ref={blogFormRef}>
-                        <BlogForm createBlog={handleCreateBlog} user={user} />
-                    </Togglable>
-                    {blogs.map(blog =>
-                        <Blog key={blog.id} blog={blog} likeBlog={handleLikeBlog} deleteBlog={handleDeleteBlog} user={user} />
-                    )}
+                    <Notification />
+                    <Blogs blogs={blogs} user={user} />
                 </Route>
             </Switch>
         </Router>
