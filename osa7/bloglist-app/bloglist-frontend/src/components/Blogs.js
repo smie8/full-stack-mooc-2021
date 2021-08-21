@@ -1,11 +1,10 @@
 import React from 'react'
 import Togglable from '../components/Togglable'
-import Blog from '../components/Blog'
 import BlogForm from '../components/BlogForm'
 import { setNotification, setNotificationStyle } from '../reducers/notificationReducer'
-// import { createBlog, likeBlog, deleteBlog } from '../reducers/blogReducer'
 import { createBlog } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
+import { Link } from 'react-router-dom'
 
 const Blogs = ({ blogs, user }) => {
     if (!blogs) {
@@ -34,9 +33,11 @@ const Blogs = ({ blogs, user }) => {
             <Togglable buttonLabel="add blog" idProp="create-new" ref={blogFormRef}>
                 <BlogForm createBlog={handleCreateBlog} user={user} />
             </Togglable>
-            {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} user={user} />
-            )}
+            <ol>
+                {blogs.map(blog =>
+                    <li key={blog.id}><Link to={`/blogs/${blog.id}`}>{blog.title} by {blog.author}</Link></li>
+                )}
+            </ol>
         </div>
     )
 }

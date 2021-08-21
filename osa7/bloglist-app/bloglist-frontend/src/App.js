@@ -94,8 +94,8 @@ const App = () => {
                 <Route path="/user/:userid">
                     <User blogs={blogs} users={users} />
                 </Route>
-                <Route path="/blog/:blogid">
-                    <Blog user={user} />
+                <Route path="/blogs/:blogid">
+                    <Blog blogs={blogs} user={user} />
                 </Route>
                 <Route path="/">
                     <Notification />

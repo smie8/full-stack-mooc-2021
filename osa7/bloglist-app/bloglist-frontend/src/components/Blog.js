@@ -1,16 +1,21 @@
-import React, { useState } from 'react'
+// import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux'
 import { setNotification, setNotificationStyle } from '../reducers/notificationReducer'
 import { likeBlog, deleteBlog } from '../reducers/blogReducer'
+import { useParams } from 'react-router-dom'
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blogs, user }) => {
+    const blogId = useParams().blogid
+    const blog = blogs.find(blog => blog.id === blogId)
+
     const dispatch = useDispatch()
-    const [detailsVisible, setDetailsVisible] = useState(false)
-    const showWhenVisible = { display: detailsVisible ? '' : 'none' }
+    // const [detailsVisible, setDetailsVisible] = useState(false)
+    // const showWhenVisible = { display: detailsVisible ? '' : 'none' }
 
-    const toggleDetailsVisibility = () => {
-        setDetailsVisible(!detailsVisible)
-    }
+    // const toggleDetailsVisibility = () => {
+    //     setDetailsVisible(!detailsVisible)
+    // }
 
     const handleBlogLike = async () => {
         const likedBlogObject = {
@@ -68,8 +73,9 @@ const Blog = ({ blog, user }) => {
 
     return (
         <div style={blogStyle} className='blogDiv'>
-            <span onClick={toggleDetailsVisibility} style={blogStyleTitle}>{blog.title} {blog.author}</span>
-            <div style={showWhenVisible} className='blogDetails'>
+            {/* <span onClick={toggleDetailsVisibility} style={blogStyleTitle}>{blog.title} by {blog.author}</span> */}
+            <span style={blogStyleTitle}>{blog.title} by {blog.author}</span>
+            <div className='blogDetails'>
                 <div style={blogStyleDetails}>
                     url: {blog.url}<br/>
                     likes: {blog.likes}<button style={likeButtonStyle} onClick={handleBlogLike}>like</button><br/>
