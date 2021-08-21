@@ -1,5 +1,9 @@
 import React, { useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import {
+    BrowserRouter as Router,
+    Switch, Route, Link
+  } from 'react-router-dom'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import BlogForm from './components/BlogForm'
@@ -22,6 +26,7 @@ const App = () => {
     const blogs = useSelector(state => state.blogs)
     const user = useSelector(state => state.user)
     const users = useSelector(state => state.users)
+    const padding = { padding: 5 }
 
     useEffect(() => {
         dispatch(initializeBlogs())
@@ -111,25 +116,38 @@ const App = () => {
     }
 
     return (
-        <div>
-            <h2>Blogs</h2>
-            <Notification />
-            <div>{user.name} logged in</div>
-            <button onClick={handleLogout}>logout</button>
-            <br/><br/>
+        <Router>
+            <div>
+                <h2>Blog app</h2>
+                <div>
+                    <Link style={padding} to="/">blogs</Link>
+                    <Link style={padding} to="/users">users</Link>
+                    <Link style={padding} to="/user">user</Link>
+                    <span style={padding}>{user.name} logged in</span>
+                    <button onClick={handleLogout}>logout</button>
+                </div>
+            </div>
+            <div>
 
-            <Togglable buttonLabel="create new" idProp="create-new" ref={blogFormRef}>
-                <BlogForm createBlog={handleCreateBlog} user={user} />
-            </Togglable>
-
-            <Users users={users} />
-            <User user={user} blogs={blogs} />
-
-            <br/><br/>
-            {blogs.map(blog =>
-                <Blog key={blog.id} blog={blog} likeBlog={handleLikeBlog} deleteBlog={handleDeleteBlog} user={user} />
-            )}
-        </div>
+            </div>
+            <Switch>
+                <Route path="/users">
+                    <Users users={users} />
+                </Route>
+                <Route path="/user">
+                    <User user={user} blogs={blogs} />
+                </Route>
+                <Route path="/">
+                    {/* TODO: Move this (blogs) to own component */}
+                    <Togglable buttonLabel="add blog" idProp="create-new" ref={blogFormRef}>
+                        <BlogForm createBlog={handleCreateBlog} user={user} />
+                    </Togglable>
+                    {blogs.map(blog =>
+                        <Blog key={blog.id} blog={blog} likeBlog={handleLikeBlog} deleteBlog={handleDeleteBlog} user={user} />
+                    )}
+                </Route>
+            </Switch>
+        </Router>
     )
 }
 
