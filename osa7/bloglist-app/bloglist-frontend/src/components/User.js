@@ -13,8 +13,8 @@ const User = ({ blogs, users }) => {
 
     return (
         <div>
-            <h2>{user.name}</h2>
-            <h3>added blogs</h3>
+            <h3>{user.name}</h3>
+            <h4>added blogs</h4>
             <ul>
                 {ownBlogs && ownBlogs.map(blog =>
                     <li key={blog.id}>{blog.title} by {blog.author} ({blog.url}), likes {blog.likes}</li>

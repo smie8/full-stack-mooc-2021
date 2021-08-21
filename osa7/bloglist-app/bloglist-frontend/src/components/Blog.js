@@ -1,4 +1,3 @@
-// import React, { useState } from 'react'
 import React from 'react'
 import { useDispatch } from 'react-redux'
 import { setNotification, setNotificationStyle } from '../reducers/notificationReducer'
@@ -10,12 +9,6 @@ const Blog = ({ blogs, user }) => {
     const blog = blogs.find(blog => blog.id === blogId)
 
     const dispatch = useDispatch()
-    // const [detailsVisible, setDetailsVisible] = useState(false)
-    // const showWhenVisible = { display: detailsVisible ? '' : 'none' }
-
-    // const toggleDetailsVisibility = () => {
-    //     setDetailsVisible(!detailsVisible)
-    // }
 
     const handleBlogLike = async () => {
         const likedBlogObject = {
@@ -73,7 +66,6 @@ const Blog = ({ blogs, user }) => {
 
     return (
         <div style={blogStyle} className='blogDiv'>
-            {/* <span onClick={toggleDetailsVisibility} style={blogStyleTitle}>{blog.title} by {blog.author}</span> */}
             <span style={blogStyleTitle}>{blog.title} by {blog.author}</span>
             <div className='blogDetails'>
                 <div style={blogStyleDetails}>
