@@ -64,6 +64,10 @@ const Blog = ({ blogs, user }) => {
         marginLeft: '0.5em',
     }
 
+    if (!blog) {
+        return null
+    }
+
     return (
         <div style={blogStyle} className='blogDiv'>
             <span style={blogStyleTitle}>{blog.title} by {blog.author}</span>
