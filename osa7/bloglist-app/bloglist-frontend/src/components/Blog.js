@@ -3,13 +3,12 @@ import { useDispatch } from 'react-redux'
 import { setNotification, setNotificationStyle } from '../reducers/notificationReducer'
 import { likeBlog, deleteBlog } from '../reducers/blogReducer'
 import { useParams } from 'react-router-dom'
+import Comments from '../components/Comments'
 
 const Blog = ({ blogs, user }) => {
     const blogId = useParams().blogid
     const blog = blogs.find(blog => blog.id === blogId)
     const comments = blog.comments
-    console.log('this comments', comments)
-
     const dispatch = useDispatch()
 
     const handleBlogLike = async () => {
@@ -79,14 +78,8 @@ const Blog = ({ blogs, user }) => {
                     likes: {blog.likes}<button style={likeButtonStyle} onClick={handleBlogLike}>like</button><br/>
                     added by: {blog.user && blog.user[0].name}
                 </div>
-                <div>
-                    comments:
-                    <ul>
-                        {comments.map(comment =>
-                            <li key={comment}>{comment}</li>
-                        )}
-                    </ul>
-                </div>
+                <br/>
+                <Comments comments={comments} id={blog.id} />
                 <div>
                     {blog.user[0].username === user.username && <button onClick={handleBlogDelete}>remove</button>}
                 </div>
