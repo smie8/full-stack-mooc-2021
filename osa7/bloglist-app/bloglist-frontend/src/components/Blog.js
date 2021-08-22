@@ -7,6 +7,8 @@ import { useParams } from 'react-router-dom'
 const Blog = ({ blogs, user }) => {
     const blogId = useParams().blogid
     const blog = blogs.find(blog => blog.id === blogId)
+    const comments = blog.comments
+    console.log('this comments', comments)
 
     const dispatch = useDispatch()
 
@@ -76,6 +78,14 @@ const Blog = ({ blogs, user }) => {
                     url: {blog.url}<br/>
                     likes: {blog.likes}<button style={likeButtonStyle} onClick={handleBlogLike}>like</button><br/>
                     added by: {blog.user && blog.user[0].name}
+                </div>
+                <div>
+                    comments:
+                    <ul>
+                        {comments.map(comment =>
+                            <li key={comment}>{comment}</li>
+                        )}
+                    </ul>
                 </div>
                 <div>
                     {blog.user[0].username === user.username && <button onClick={handleBlogDelete}>remove</button>}
