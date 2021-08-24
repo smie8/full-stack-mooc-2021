@@ -3,11 +3,20 @@ import { useDispatch } from 'react-redux'
 import { setNotification, setNotificationStyle } from '../reducers/notificationReducer'
 import { likeBlog, deleteBlog } from '../reducers/blogReducer'
 import { useParams } from 'react-router-dom'
+import { Button, Table } from 'react-bootstrap'
 import Comments from '../components/Comments'
+import Notification from '../components/Notification'
 
 const Blog = ({ blogs, user }) => {
     const blogId = useParams().blogid
     const blog = blogs.find(blog => blog.id === blogId)
+
+    if (!blog) {
+        return (
+            <Notification />
+        )
+    }
+
     const comments = blog.comments
     const dispatch = useDispatch()
 
@@ -51,34 +60,29 @@ const Blog = ({ blogs, user }) => {
         margin: '1em 0 1em 0',
     }
 
-    const blogStyleDetails = {
-        fontSize: '0.9em',
-        padding: '0.5em 0 0 0',
-    }
-
-    const blogStyleTitle = {
-        fontWeight: '800',
-        cursor: 'pointer',
-    }
-
-    const likeButtonStyle = {
-        marginLeft: '0.5em',
-    }
-
-    if (!blog) {
-        return null
-    }
-
     return (
         <div style={blogStyle} className='blogDiv'>
-            <span style={blogStyleTitle}>{blog.title} by {blog.author}</span>
+            <Notification />
+            <h4>{blog.title} by {blog.author}</h4>
             <div className='blogDetails'>
-                <div style={blogStyleDetails}>
-                    url: {blog.url}<br/>
-                    likes: {blog.likes}<button style={likeButtonStyle} onClick={handleBlogLike}>like</button><br/>
-                    added by: {blog.user && blog.user[0].name}
-                </div>
-                <br/>
+                <Table>
+                    <tbody>
+                        <tr>
+                            <td>url:</td>
+                            <td>{blog.url}</td>
+                        </tr>
+                        <tr>
+                            <td>added by:</td>
+                            <td>{blog.user && blog.user[0].name}</td>
+                        </tr>
+                        <tr>
+                            <td>likes:</td>
+                            <td>{blog.likes}</td>
+                        </tr>
+                    </tbody>
+                </Table>
+                <Button variant='success' onClick={handleBlogLike}>like</Button>
+                <br/><br/>
                 <Comments comments={comments} id={blog.id} />
                 <div>
                     {blog.user[0].username === user.username && <button onClick={handleBlogDelete}>remove</button>}

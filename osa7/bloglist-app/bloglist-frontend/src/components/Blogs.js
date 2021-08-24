@@ -1,6 +1,7 @@
 import React from 'react'
 import Togglable from '../components/Togglable'
 import BlogForm from '../components/BlogForm'
+import { Table } from 'react-bootstrap'
 import { setNotification, setNotificationStyle } from '../reducers/notificationReducer'
 import { createBlog } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
@@ -34,11 +35,19 @@ const Blogs = ({ blogs, user }) => {
             <Togglable buttonLabel="add blog" idProp="create-new" ref={blogFormRef}>
                 <BlogForm createBlog={handleCreateBlog} user={user} />
             </Togglable>
-            <ol>
-                {blogs.map(blog =>
-                    <li key={blog.id}><Link to={`/blogs/${blog.id}`}>{blog.title} by {blog.author}</Link></li>
-                )}
-            </ol>
+            <Table striped>
+                <tbody>
+                    {blogs.map(blog =>
+                        <tr key={blog.id}>
+                            <td>
+                                <Link to={`/blogs/${blog.id}`}>
+                                    {blog.title} by {blog.author}
+                                </Link>
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </Table>
         </div>
     )
 }

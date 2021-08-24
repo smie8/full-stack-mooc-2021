@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { Form, Button } from 'react-bootstrap'
 
 const BlogForm = ({ createBlog, user }) => {
     const [newBlogTitle, setNewBlogTitle] = useState('')
@@ -33,31 +34,37 @@ const BlogForm = ({ createBlog, user }) => {
 
     return (
         <div className='blogForm'>
-            <h2>create new</h2>
-            <form onSubmit={addBlog}>
-                title:
-                <input
-                    id='title'
-                    value={newBlogTitle}
-                    onChange={handleBlogTitleChange}
-                />
-                <br/>
-                author:
-                <input
-                    id='author'
-                    value={newBlogAuthor}
-                    onChange={handleBlogAuthorChange}
-                />
-                <br/>
-                url:
-                <input
-                    id='url'
-                    value={newBlogUrl}
-                    onChange={handleBlogUrlChange}
-                />
-                <br/>
-                <button id='submit-blog' type="submit">add</button>
-            </form>
+            <Form onSubmit={addBlog}>
+                <Form.Group>
+                    <Form.Label>title:</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="title"
+                        value={newBlogTitle}
+                        onChange={handleBlogTitleChange}
+                        id="title"
+                    />
+                    <Form.Label>author:</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="author"
+                        value={newBlogAuthor}
+                        onChange={handleBlogAuthorChange}
+                        id="author"
+                    />
+                    <Form.Label>url:</Form.Label>
+                    <Form.Control
+                        type="text"
+                        name="url"
+                        value={newBlogUrl}
+                        onChange={handleBlogUrlChange}
+                        id="url"
+                    />
+                    <Button variant="primary" type="submit">
+                        add
+                    </Button>
+                </Form.Group>
+            </Form>
         </div>
     )
 }

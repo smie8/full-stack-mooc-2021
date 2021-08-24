@@ -12,6 +12,7 @@ import Users from './components/Users'
 import User from './components/User'
 import blogService from './services/blogs'
 import loginService from './services/login'
+import { Button } from 'react-bootstrap'
 import { setNotification, setNotificationStyle } from './reducers/notificationReducer'
 import { initializeBlogs } from './reducers/blogReducer'
 import { setUser } from './reducers/userReducer'
@@ -60,7 +61,7 @@ const App = () => {
 
     if (user === null) {
         return (
-            <div>
+            <div className='container'>
                 <Notification />
                 <LoginForm
                     username={username}
@@ -74,35 +75,39 @@ const App = () => {
     }
 
     return (
-        <Router>
-            <div>
-                <h2>Blog app</h2>
+        <div className='container'>
+            <Router>
                 <div>
-                    <Link style={padding} to="/">blogs</Link>
-                    <Link style={padding} to="/users">users</Link>
-                    <span style={padding}>{user.name} logged in</span>
-                    <button onClick={handleLogout}>logout</button>
+                    <h2>Blog app</h2>
+                    <div>
+                        <Link style={padding} to="/">blogs</Link>
+                        <Link style={padding} to="/users">users</Link>
+                        <span className='float-right'>
+                            <span style={padding}>{user.name} logged in</span>
+                            <Button variant='warning' onClick={handleLogout}>logout</Button>
+                        </span>
+                    </div>
                 </div>
-            </div>
-            <div>
+                <div>
 
-            </div>
-            <Switch>
-                <Route path="/users">
-                    <Users users={users} />
-                </Route>
-                <Route path="/user/:userid">
-                    <User blogs={blogs} users={users} />
-                </Route>
-                <Route path="/blogs/:blogid">
-                    <Blog blogs={blogs} user={user} />
-                </Route>
-                <Route path="/">
-                    <Notification />
-                    <Blogs blogs={blogs} user={user} />
-                </Route>
-            </Switch>
-        </Router>
+                </div>
+                <Switch>
+                    <Route path="/users">
+                        <Users users={users} />
+                    </Route>
+                    <Route path="/user/:userid">
+                        <User blogs={blogs} users={users} />
+                    </Route>
+                    <Route path="/blogs/:blogid">
+                        <Blog blogs={blogs} user={user} />
+                    </Route>
+                    <Route path="/">
+                        <Notification />
+                        <Blogs blogs={blogs} user={user} />
+                    </Route>
+                </Switch>
+            </Router>
+        </div>
     )
 }
 

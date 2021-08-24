@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux'
 import { commentBlog } from '../reducers/blogReducer'
 import { setNotification, setNotificationStyle } from '../reducers/notificationReducer'
 import { v4 as uuid_v4 } from 'uuid'
-import Notification from '../components/Notification'
+import { Table, Form, Button } from 'react-bootstrap'
 
 const Comments = ({ comments, id }) => {
     const [newComment, setNewComment] = useState('')
@@ -32,22 +32,31 @@ const Comments = ({ comments, id }) => {
 
     return (
         <div>
-            comments:
-            <ul>
-                {comments.map(comment =>
-                    <li key={uuid_v4()}>{comment}</li>
-                )}
-            </ul>
-            <form onSubmit={addComment}>
-                <input
-                    id='comment'
-                    value={newComment}
-                    onChange={handleCommentChange}
-                />
-                <button id='submit-comment' type="submit">add comment</button>
-            </form>
+            <h4>comments</h4>
+            <Table striped>
+                <tbody>
+                    {comments && comments.map(comment =>
+                        <tr key={uuid_v4()}>
+                            <td>
+                                {comment}
+                            </td>
+                        </tr>
+                    )}
+                </tbody>
+            </Table>
+            <Form onSubmit={addComment}>
+                <Form.Group>
+                    <Form.Control
+                        id='comment'
+                        value={newComment}
+                        onChange={handleCommentChange}
+                    />
+                    <Button variant="primary" type="submit">
+                        add comment
+                    </Button>
+                </Form.Group>
+            </Form>
             <br/>
-            <Notification />
         </div>
     )
 }
