@@ -1,7 +1,5 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
-const User = require('../models/user')
-const jwt = require('jsonwebtoken')
 const middleware = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response, next) => {
@@ -58,6 +56,8 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response, n
 })
 
 blogsRouter.put('/:id', middleware.userExtractor, async (request, response, next) => {
+  const id = request.params.id
+
   try {
     const updatedBlog = {
       title: request.body.title,
@@ -67,11 +67,28 @@ blogsRouter.put('/:id', middleware.userExtractor, async (request, response, next
       user: request.body.user,
       id: request.body.id
     }
-    await Blog.findByIdAndUpdate(request.params.id, { likes: request.body.likes })
+    await Blog.findByIdAndUpdate(id, { likes: request.body.likes })
     response
       .json(updatedBlog)
       .status(204)
       .end()
+  } catch(exception) {
+    next(exception)
+  }
+})
+
+blogsRouter.post('/:id/comments', middleware.userExtractor, async (request, response, next) => {
+  try {
+    const body = request.body
+    const id = request.params.id
+    const blog = await Blog.findById(id)
+
+    let updatedComments = blog.comments
+    updatedComments = blog.comments.concat(body.comment)
+
+    const updatedBlog = await Blog.findByIdAndUpdate(id, { comments: updatedComments })
+
+    response.json(updatedBlog.toJSON())
   } catch(exception) {
     next(exception)
   }
